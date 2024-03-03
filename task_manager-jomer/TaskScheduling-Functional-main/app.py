@@ -89,6 +89,14 @@ def process_request(request, *args):
         return args + tuple(request.form[arg] for arg in args)
     return args
 
+# Function to handle database transactions
+def transaction_handler(query, params=(), commit=False):
+    return lambda conn: execute_query(query, params, commit)
+
+# Function to compose multiple functions
+def compose(*functions):
+    return lambda x: reduce(lambda v, f: f(v), functions, x)
+
 # Flask routes
 @app.route('/')
 def index():
